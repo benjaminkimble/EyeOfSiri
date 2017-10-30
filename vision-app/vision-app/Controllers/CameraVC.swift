@@ -24,10 +24,12 @@ class CameraVC: UIViewController {
     @IBOutlet weak var confidenceLbl: UILabel!
     @IBOutlet weak var cameraView: UIView!
     @IBOutlet weak var roundedLblView: RoundedShadowView!
+    @IBOutlet weak var previewSpinner: UIActivityIndicatorView!
     
     var captureSession: AVCaptureSession!
     var cameraOutput: AVCapturePhotoOutput!
     var previewLayer: AVCaptureVideoPreviewLayer!
+    var speechSynthesizer = AVSpeechSynthesizer()
     var photoData: Data?
     var flashControlState: FlashState = .off
     
@@ -45,6 +47,10 @@ class CameraVC: UIViewController {
     }
     
     @objc func didTapCameraView() {
+        cameraView.isUserInteractionEnabled = false
+        previewSpinner.isHidden = false
+        previewSpinner.startAnimating()
+        
         let settings = AVCapturePhotoSettings()
         
         settings.previewPhotoFormat = settings.embeddedThumbnailPhotoFormat
@@ -63,15 +69,26 @@ class CameraVC: UIViewController {
         
         for classification in results {
             if classification.confidence < 0.5 {
-                self.identificationLbl.text = "I'm not sure what this is. Please try again."
+                let unknownObjectMessage = "I'm not sure what this is. Please try again."
+                self.identificationLbl.text = unknownObjectMessage
+                synthesizeSpeech(fromString: unknownObjectMessage)
                 self.confidenceLbl.text = ""
                 break
             } else {
+                let objectMessage = classification.identifier
+                let confidenceLevel = Int(classification.confidence * 100)
                 self.identificationLbl.text = classification.identifier
-                self.confidenceLbl.text = "CONFIDENCE: \(Int(classification.confidence * 100))%"
+                self.confidenceLbl.text = "CONFIDENCE: \(confidenceLevel)%"
+                let completeSentence = "This looks like a \(objectMessage) and I'm \(confidenceLevel) percent sure."
+                synthesizeSpeech(fromString: completeSentence)
                 break
             }
         }
+    }
+    
+    func synthesizeSpeech(fromString string: String) {
+        let speechUtterance = AVSpeechUtterance(string: string)
+        speechSynthesizer.speak(speechUtterance)
     }
     
     override func viewDidLoad() {
@@ -81,7 +98,9 @@ class CameraVC: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        previewSpinner.isHidden = true
         previewLayer.frame = cameraView.bounds
+        speechSynthesizer.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -141,3 +160,10 @@ extension CameraVC: AVCapturePhotoCaptureDelegate {
     }
 }
 
+extension CameraVC: AVSpeechSynthesizerDelegate {
+    func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        cameraView.isUserInteractionEnabled = true
+        previewSpinner.stopAnimating()
+        previewSpinner.isHidden = true
+    }
+}

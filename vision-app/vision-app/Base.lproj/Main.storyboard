@@ -77,12 +77,17 @@
                                     <action selector="flashBtnPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XTh-fr-1iH"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="zcw-oZ-x7Y">
+                                <rect key="frame" x="307" y="573" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="zcw-oZ-x7Y" firstAttribute="centerY" secondItem="qwD-LG-s9W" secondAttribute="centerY" id="1fD-Ru-mMx"/>
                             <constraint firstItem="PbI-E3-Tag" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="90L-Zq-WsK"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PbI-E3-Tag" secondAttribute="trailing" constant="20" id="GRR-QD-FO2"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="qwD-LG-s9W" secondAttribute="trailing" constant="20" id="IOn-hu-aT4"/>
+                            <constraint firstItem="zcw-oZ-x7Y" firstAttribute="centerX" secondItem="qwD-LG-s9W" secondAttribute="centerX" id="Kc4-CU-SHq"/>
                             <constraint firstItem="cwq-BI-5wP" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="OgC-sb-xLa"/>
                             <constraint firstItem="cwq-BI-5wP" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Rh1-b9-RCM"/>
                             <constraint firstItem="PbI-E3-Tag" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="30" id="ePq-Fk-LJZ"/>
@@ -100,6 +105,7 @@
                         <outlet property="confidenceLbl" destination="Xtz-9F-mGq" id="BHj-Hd-Hbx"/>
                         <outlet property="flashBtn" destination="Nld-Tz-lLa" id="Jqz-t2-tXn"/>
                         <outlet property="identificationLbl" destination="g01-JS-GgV" id="yPp-pH-MUq"/>
+                        <outlet property="previewSpinner" destination="zcw-oZ-x7Y" id="cfw-Ao-AV3"/>
                         <outlet property="roundedLblView" destination="PbI-E3-Tag" id="kId-Zm-GZe"/>
                     </connections>
                 </viewController>
